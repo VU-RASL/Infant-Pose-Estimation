@@ -27,7 +27,7 @@ class Mahalanobis(object):
         else:
             return (pose[:, self.prefix:]-self.mean).dot(self.prec)
 
-syn_folder = '/home/faye/Documents/smil/outputs'
+syn_folder = '/home/dresden/repositories/Infant-Pose-Estimation/syn_generation/render/output'
 
 ## Assign attributes to renderer
 w, h = (640, 480)
@@ -38,7 +38,7 @@ tmpl = load_mesh('template.obj')
 
 
 ## List background images
-bg_folder = '/home/faye/Documents/smil/bg_img'
+bg_folder = '/home/dresden/repositories/Infant-Pose-Estimation/syn_generation/bg'
 bg_list = []                                                                                                            
 bg_subdirs = [x[0] for x in os.walk(bg_folder)]                                                                            
 for subdir in bg_subdirs:                                                                                            
@@ -50,7 +50,7 @@ for subdir in bg_subdirs:
 
 
 ## List texture images
-txt_folder = '/home/faye/Documents/smil/textures'
+txt_folder = '/home/dresden/repositories/Infant-Pose-Estimation/syn_generation/render/textures'
 txt_list = []                                                                                                            
 txt_subdirs = [x[0] for x in os.walk(txt_folder)]                                                                            
 for subdir in txt_subdirs:                                                                                            
@@ -61,7 +61,7 @@ for subdir in txt_subdirs:
 #print(txt_list)
 
 num = 0
-bodies_folder = '/home/faye/Documents/smil/bodies'
+bodies_folder = '/home/dresden/repositories/Infant-Pose-Estimation/syn_generation/output/results'
 for x in os.walk(bodies_folder):  
     if x[0] == bodies_folder:
         continue 
@@ -96,6 +96,8 @@ for x in os.walk(bodies_folder):
         bg_idx = num % len(bg_list)
         bg_file = bg_list[bg_idx]
         bg = cv2.imread(bg_file)
+        bg = cv2.resize(bg,(w,h), interpolation = cv2.INTER_LINEAR)
+        print(f'bg wxh: {bg.shape[1]}x{bg.shape[0]}')
         x = 0
         y = 0
         bg_im = bg[y:y+h, x:x+w].astype(np.float64)/255
@@ -104,6 +106,7 @@ for x in os.walk(bodies_folder):
         txt_file = txt_list[txt_idx]
         txt = cv2.imread(txt_file)
         txt = cv2.cvtColor(txt, cv2.COLOR_BGR2RGB)
+        print(f'texture wxh: {txt.shape[1]}x{txt.shape[0]}')
         txt_im = txt.astype(np.float64)/255 
 
         cam = ProjectPoints(v=m.r, rt=np.zeros(3), t = np.array([0, -.1, .5]), f=np.array([w,w])/2., c=np.array([w,h])/2, k=np.zeros(5))
@@ -113,6 +116,7 @@ for x in os.walk(bodies_folder):
                                  camera = cam,
                                  frustum = {'near': .1, 'far': 10., 'width': w, 'height': h},
                                  overdraw=False)
+        print(rn.r)
         data = 255 * rn.r
         cv2.imshow('render_SMIL', rn.r)
         

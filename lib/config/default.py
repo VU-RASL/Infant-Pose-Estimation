@@ -26,6 +26,15 @@ _C.AUTO_RESUME = False
 _C.PIN_MEMORY = True
 _C.RANK = 0
 
+# Yolo related params
+_C.YOLO = CN()
+_C.YOLO.VERSION = 'v3'
+_C.YOLO.MODEL_DEF = 'lib/models/detectors/yolo/config/yolov3.cfg'
+_C.YOLO.CLASS_PATH = 'lib/models/detectors/yolo/data/coco.names'
+_C.YOLO.WEIGHTS = 'lib/models/detectors/yolo/weights/yolov3.weights'
+_C.YOLO.BATCH_SIZE = 32
+_C.YOLO.DEVICE = 'cuda'
+
 # Cudnn related params
 _C.CUDNN = CN()
 _C.CUDNN.BENCHMARK = True

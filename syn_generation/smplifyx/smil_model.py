@@ -26,10 +26,7 @@ import os
 import os.path as osp
 
 
-try:
-    import cPickle as pickle
-except ImportError:
-    import pickle
+import pickle
 
 import numpy as np
 

@@ -11,3 +11,4 @@ from __future__ import print_function
 
 from .coco import COCODataset as coco
 from .syrip import SYRIPDataset as syrip
+from .prediction import PredictionDataset as custom
